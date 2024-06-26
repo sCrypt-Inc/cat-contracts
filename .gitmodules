@@ -1,3 +1,6 @@
+[submodule "scrypt-btc-vault"]
+	path = scrypt-btc-vault
+	url = git@github.com:sCrypt-Inc/scrypt-btc-merkle.git
 [submodule "scrypt-btc-merkle"]
 	path = scrypt-btc-merkle
 	url = git@github.com:sCrypt-Inc/scrypt-btc-merkle.git
