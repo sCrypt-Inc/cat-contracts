@@ -1,4 +1,4 @@
-# sCrypt CAT Smart Contract
+# sCrypt CAT Smart Contracts
 
 A collection of CATful smart contracts for BTC written in sCrypt.
 
