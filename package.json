@@ -1,0 +1,66 @@
+{
+  "name": "scrypt-cat-contracts",
+  "version": "0.1.0",
+  "description": "A collection of sCrypt smart contracts for BTC leveraging OP_CAT",
+  "author": "",
+  "scripts": {
+    "prebuild": "npm run clean",
+    "build": "tsc",
+    "deploy": "npx ts-node ./deploy.ts",
+    "clean": "rimraf scrypt.index.json && rimraf dist && rimraf artifacts",
+    "compile": "npx scrypt-cli compile && npx ts-node ./postCompile.ts",
+    "pretest": "npm run build && npm run compile",
+    "test": "npm run test:mocha",
+    "test:mocha": "cross-env NETWORK=local mocha",
+    "pretest:testnet": "npm run build && npm run compile",
+    "test:testnet": "cross-env NETWORK=testnet mocha --no-timeouts",
+    "genprivkey": "npx ts-node tests/utils/privateKey.ts",
+    "lint": "eslint . --ext .js,.ts --fix && prettier --write --ignore-unknown \"**/*\"",
+    "lint-check": "eslint . --ext .js,.ts && prettier --check --ignore-unknown \"**/*\"",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "**/*": [
+      "prettier --write --ignore-unknown"
+    ],
+    "**/*.{ts,js}": [
+      "eslint --cache --fix"
+    ]
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "scrypt-ts": "latest"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.4",
+    "@types/chai-as-promised": "^7.1.5",
+    "@types/mocha": "^10.0.0",
+    "@types/node": "^18.11.10",
+    "@typescript-eslint/eslint-plugin": "^6.5.0",
+    "@typescript-eslint/parser": "^6.5.0",
+    "chai": "^4.3.6",
+    "chai-as-promised": "^7.1.1",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.48.0",
+    "eslint-config-prettier": "^8.6.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.1.0",
+    "mocha": "^10.1.0",
+    "prettier": "^2.8.2",
+    "rimraf": "^3.0.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.3.3",
+    "scrypt-cli": "^0.1.68",
+    "@cmdcode/buff": "^2.2.4",
+    "@cmdcode/crypto-tools": "^2.7.4",
+    "@cmdcode/tapscript": "^1.4.4",
+    "@types/ecurve": "^1.0.3",
+    "axios": "^1.6.2",
+    "bitcore-lib-inquisition": "10.0.29-dev.1",
+    "ecpair": "^2.1.0",
+    "ecurve": "^1.0.6",
+    "node-fetch": "^3.3.2",
+    "regtest-client": "^0.2.1"
+  },
+  "license": "MIT"
+}

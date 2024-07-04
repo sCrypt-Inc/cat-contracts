@@ -1,0 +1,5 @@
+{
+  "VaultCompleteWithdrawal": {
+    "csv": "OP_CODESEPARATOR OP_TRUE"
+  }
+}

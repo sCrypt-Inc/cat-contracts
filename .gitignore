@@ -1,0 +1,11 @@
+node_modules/
+dist/
+out/
+artifacts/
+**/.env
+**/scrypt.index.json
+tsconfig-scryptTS.json
+.vscode/*
+!.vscode/launch.json
+!.vscode/tasks.json
+!.vscode/settings.json
