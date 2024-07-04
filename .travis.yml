@@ -1,7 +1,7 @@
 dist: focal
 language: node_js
 node_js:
-  - 16
+  - 20
 
 before_install:
 
