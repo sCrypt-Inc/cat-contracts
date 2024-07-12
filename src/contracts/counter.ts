@@ -25,7 +25,7 @@ export class Counter extends SmartContract {
     }
 
     @method()
-    public complete(
+    public increment(
         shPreimage: SHPreimage,
         prevTxVer: ByteString,
         prevTxLocktime: ByteString,
