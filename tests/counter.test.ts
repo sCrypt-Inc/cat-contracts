@@ -1,11 +1,6 @@
 // @ts-ignore
 import btc = require('bitcore-lib-inquisition');
-import axios from 'axios';
 import { Tap } from '@cmdcode/tapscript'  // Requires node >= 19
-import * as ecurve from 'ecurve';
-import { sha256 } from 'js-sha256';
-// @ts-ignore
-import BigInteger = require('bigi')
 
 import * as dotenv from 'dotenv';
 dotenv.config();
@@ -13,100 +8,8 @@ dotenv.config();
 import { expect, use } from 'chai'
 import { Counter } from '../src/contracts/counter'
 import chaiAsPromised from 'chai-as-promised'
+import { fetchP2WPKHUtxos, getE, getSigHashSchnorr, splitSighashPreimage } from './utils/txHelper';
 use(chaiAsPromised)
-
-const curve = ecurve.getCurveByName('secp256k1');
-
-async function fetchP2WPKHUtxos(address: btc.Address): Promise<any[]> {
-    const url = `https://explorer.bc-2.jp/api/address/${address.toString()}/utxo`;
-
-    let res: any[] = []
-    try {
-        // Make a GET request to the URL using axios
-        const response = await axios.get(url, {
-            timeout: 10000
-        });
-
-        if (response.data) {
-            for (let i = 0; i < response.data.length; i++) {
-                const e = response.data[i]
-                const utxo = {
-                    address: address.toString(),
-                    txId: e.txid,
-                    outputIndex: e.vout,
-                    script: new btc.Script(address),
-                    satoshis: e.value
-                };
-                res.push(utxo)
-            }
-        }
-    } catch (error) { // Handle any errors that occurred during the request
-        console.error('Failed to fetch data:', error);
-    }
-    return res
-}
-
-function hashSHA256(buff: Buffer | string) {
-    return Buffer.from(sha256.create().update(buff).array());
-}
-
-function getSigHashSchnorr(
-    transaction: btc.Transaction,
-    tapleafHash: Buffer,
-    inputIndex = 0,
-    sigHashType = 0x00
-) {
-    //const sighash = btc.Transaction.Sighash.sighash(transaction, sigHashType, inputIndex, subscript);
-    const execdata = {
-        annexPresent: false,
-        annexInit: true,
-        tapleafHash: tapleafHash,
-        tapleafHashInit: true,
-        ////validationWeightLeft: 110,
-        ////validationWeightLeftInit: true,
-        codeseparatorPos: new btc.crypto.BN(4294967295),
-        codeseparatorPosInit: true,
-    }
-    
-    return {
-        preimage: btc.Transaction.SighashSchnorr.sighashPreimage(transaction, sigHashType, inputIndex, 3, execdata),
-        hash: btc.Transaction.SighashSchnorr.sighash(transaction, sigHashType, inputIndex, 3, execdata)
-    }
-}
-
-
-function getE(
-    sighash: Buffer
-) {
-    const Gx = curve.G.affineX.toBuffer(32);
-
-    const tagHash = hashSHA256('BIP0340/challenge')
-    const tagHashMsg = Buffer.concat([Gx, Gx, sighash])
-    const taggedHash = hashSHA256(Buffer.concat([tagHash, tagHash, tagHashMsg]))
-
-    return BigInteger.fromBuffer(taggedHash).mod(curve.n);
-}
-
-function splitSighashPreimage(preimage: Buffer) {
-    return {
-        tapSighash1: preimage.slice(0, 32),
-        tapSighash2: preimage.slice(32, 64),
-        epoch: preimage.slice(64, 65),
-        sighashType: preimage.slice(65, 66),
-        txVersion: preimage.slice(66, 70),
-        nLockTime: preimage.slice(70, 74),
-        hashPrevouts: preimage.slice(74, 106),
-        hashSpentAmounts: preimage.slice(106, 138),
-        hashScripts: preimage.slice(138, 170),
-        hashSequences: preimage.slice(170, 202),
-        hashOutputs: preimage.slice(202, 234),
-        spendType: preimage.slice(234, 235),
-        inputNumber: preimage.slice(235, 239),
-        tapleafHash: preimage.slice(239, 271),
-        keyVersion: preimage.slice(271, 272),
-        codeseparatorPosition: preimage.slice(272)
-    };
-}
 
 
 describe('Test SmartContract `Counter`', () => {

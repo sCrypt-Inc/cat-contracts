@@ -56,7 +56,7 @@ For example if we'd like to test the counter smart contract on signet, we'd firs
 
 ```sh
 npx scrypt-cli@latest compile -i "src/contracts/counter.ts" && \
-npx mocha --no-config --require ts-node/register tests/counter.test.ts
+NETWORK=testnet npx mocha --no-config --require ts-node/register tests/counter.test.ts
 ```
 
 ```
