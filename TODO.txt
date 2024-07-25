@@ -1,0 +1,2 @@
+- make genprivkey generate BTC address
+- rebase bitcore lib, get rid of tapscript dependency if possible
