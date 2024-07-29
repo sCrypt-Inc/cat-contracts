@@ -4,6 +4,7 @@ import {
     hash256,
     Sha256,
     FixedArray,
+    ByteString,
 } from 'scrypt-ts'
 
 export const MERKLE_PROOF_MAX_DEPTH = 32
@@ -21,7 +22,7 @@ export enum NodePos {
 }
 
 export type Node = {
-    hash: Sha256
+    hash: ByteString
     pos: NodePos
 }
 

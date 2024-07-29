@@ -27,8 +27,6 @@ describe('Test SmartContract `TestMerklePath`', () => {
         )
 
         instance = new TestMerklePath(merkleRoot)
-
-        console.log('Script len:', instance.lockingScript.toBuffer().length)
     })
 
     it('merkle proof validation BTC', async () => {
