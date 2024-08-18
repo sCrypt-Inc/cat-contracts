@@ -132,14 +132,14 @@ describe('Test SmartContract `Vault`', () => {
             .addOutput(tx0.outputs[0])
             .addOutput(targetOut)
 
-        // Mutate tx1 until e ends with 0x01.
-        let e, eBuff, sighash;
+        // Mutate tx1 if it ends with 0x7f (highest single byte stack value) or 0xff (lowest signle byte stack value).
+        let e, eBuff, sighash, eLastByte;
         while (true) {
             sighash = getSigHashSchnorr(tx1, Buffer.from(tapleafVaultTrigger, 'hex'), 0)
             e = await getE(sighash.hash)
             eBuff = e.toBuffer(32)
-            const eLastByte = eBuff[eBuff.length - 1]
-            if (eLastByte == 1) {
+            eLastByte = eBuff[eBuff.length - 1]
+            if (eLastByte != 0x7f && eLastByte != 0xff) {
                 break;
             }
             tx1.nLockTime += 1
@@ -172,6 +172,7 @@ describe('Test SmartContract `Vault`', () => {
             preimageParts.codeseparatorPosition,
             sighash.hash,
             _e,
+            Buffer.from(eLastByte.toString(16), 'hex'),
             sig,
             Buffer.concat([Buffer.from('22', 'hex'), scripVaultP2TR.toBuffer()]),
             Buffer.concat([Buffer.from('16', 'hex'), txFee.outputs[0].script.toBuffer()]),
@@ -219,13 +220,13 @@ describe('Test SmartContract `Vault`', () => {
 
         tx2.inputs[0].lockUntilBlockHeight(2)
 
-        // Mutate tx2 until e ends with 0x01.
+        // Mutate tx2 if it ends with 0x7f (highest single byte stack value) or 0xff (lowest signle byte stack value).
         while (true) {
             sighash = getSigHashSchnorr(tx2, Buffer.from(tapleafVaultComplete, 'hex'), 0)
             e = await getE(sighash.hash)
             eBuff = e.toBuffer(32)
-            const eLastByte = eBuff[eBuff.length - 1]
-            if (eLastByte == 1) {
+            eLastByte = eBuff[eBuff.length - 1]
+            if (eLastByte != 0x7f && eLastByte != 0xff) {
                 break;
             }
             tx2.nLockTime += 1
@@ -272,6 +273,7 @@ describe('Test SmartContract `Vault`', () => {
             preimageParts.codeseparatorPosition,
             sighash.hash,
             _e,
+            Buffer.from(eLastByte.toString(16), 'hex'),
             prevTxVer,
             prevTxLocktime,
             prevTxInputContract.toBuffer(),

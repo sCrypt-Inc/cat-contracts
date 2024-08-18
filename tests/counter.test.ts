@@ -115,19 +115,18 @@ describe('Test SmartContract `Counter`', () => {
                 script: opRetScript1
             }))
 
-        // Mutate tx1 until e ends with 0x01.
-        let e, eBuff, sighash;
+        // Mutate tx1 if it ends with 0x7f (highest single byte stack value) or 0xff (lowest signle byte stack value).
+        let e, eBuff, sighash, eLastByte;
         while (true) {
             sighash = getSigHashSchnorr(tx1, Buffer.from(tapleafCounter, 'hex'), 0)
             e = await getE(sighash.hash)
             eBuff = e.toBuffer(32)
-            const eLastByte = eBuff[eBuff.length - 1]
-            if (eLastByte == 1) {
+            eLastByte = eBuff[eBuff.length - 1]
+            if (eLastByte != 0x7f && eLastByte != 0xff) {
                 break;
             }
             tx1.nLockTime += 1
         }
-
 
         let _e = eBuff.slice(0, eBuff.length - 1) // e' - e without last byte
         let preimageParts = splitSighashPreimage(sighash.preimage)
@@ -155,7 +154,7 @@ describe('Test SmartContract `Counter`', () => {
         let feePrevout = new btc.encoding.BufferWriter()
         feePrevout.writeReverse(tx1.inputs[1].prevTxId);
         feePrevout.writeInt32LE(tx1.inputs[1].outputIndex);
-
+        
         let witnesses = [
             preimageParts.txVersion,
             preimageParts.nLockTime,
@@ -171,6 +170,7 @@ describe('Test SmartContract `Counter`', () => {
             preimageParts.codeseparatorPosition,
             sighash.hash,
             _e,
+            Buffer.from(eLastByte.toString(16), 'hex'),
             prevTxVer,
             prevTxLocktime,
             prevTxInputContract.toBuffer(),
@@ -219,13 +219,13 @@ describe('Test SmartContract `Counter`', () => {
                 script: opRetScript2
             }))
 
-        // Mutate tx2 until e ends with 0x01.
+        // Mutate tx2 if it ends with 0x7f (highest single byte stack value) or 0xff (lowest signle byte stack value).
         while (true) {
             sighash = getSigHashSchnorr(tx2, Buffer.from(tapleafCounter, 'hex'), 0)
             e = await getE(sighash.hash)
             eBuff = e.toBuffer(32)
-            const eLastByte = eBuff[eBuff.length - 1]
-            if (eLastByte == 1) {
+            eLastByte = eBuff[eBuff.length - 1]
+            if (eLastByte != 0x7f && eLastByte != 0xff) {
                 break;
             }
             tx2.nLockTime += 1
@@ -273,6 +273,7 @@ describe('Test SmartContract `Counter`', () => {
             preimageParts.codeseparatorPosition,
             sighash.hash,
             _e,
+            Buffer.from(eLastByte.toString(16), 'hex'),
             prevTxVer,
             prevTxLocktime,
             prevTxInputContract.toBuffer(),
