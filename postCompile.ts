@@ -2,10 +2,10 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 /////////////////////////////////////
-//
-let filePath = path.resolve(__dirname, './artifacts/vaultCompleteWithdrawal.json');
 
-fs.readFile(filePath, 'utf8', (err, data) => {
+const filePathVaultCompleteWithdrawal = path.resolve(__dirname, './artifacts/vaultCompleteWithdrawal.json');
+
+fs.readFile(filePathVaultCompleteWithdrawal, 'utf8', (err, data) => {
     if (err) {
         console.error('Error reading file:', err);
         return;
@@ -15,21 +15,22 @@ fs.readFile(filePath, 'utf8', (err, data) => {
     // since sCrypt compiler doesn't support CSV for now...
     const result = data.replace(/ab51/g, 'b251');
 
-    fs.writeFile(filePath, result, 'utf8', (err) => {
+    fs.writeFile(filePathVaultCompleteWithdrawal, result, 'utf8', (err) => {
         if (err) {
             console.error('Error writing file:', err);
             return;
         }
 
-        console.log('File updated successfully.');
+
+        console.log('Post-compile hook completed for:', filePathVaultCompleteWithdrawal.toString())
     });
 });
 
 /////////////////////////////////////
 
-filePath = path.resolve(__dirname, './artifacts/tests/testMerklePath.json');
+const filePathTestMerklePath = path.resolve(__dirname, './artifacts/tests/testMerklePath.json');
 
-fs.readFile(filePath, 'utf8', (err, data) => {
+fs.readFile(filePathTestMerklePath, 'utf8', (err, data) => {
     if (err) {
         console.error('Error reading file:', err);
         return;
@@ -39,21 +40,21 @@ fs.readFile(filePath, 'utf8', (err, data) => {
     // since BTC doesn't support OP_MUL...
     const result = data.replace(/5295/g, '7693');
 
-    fs.writeFile(filePath, result, 'utf8', (err) => {
+    fs.writeFile(filePathTestMerklePath, result, 'utf8', (err) => {
         if (err) {
             console.error('Error writing file:', err);
             return;
         }
 
-        console.log('File updated successfully.');
+        console.log('Post-compile hook completed for:', filePathTestMerklePath.toString())
     });
 });
 
 /////////////////////////////////////
 
-filePath = path.resolve(__dirname, './artifacts/tests/testLamportOracle.json');
+const filePathTestLamportOracle = path.resolve(__dirname, './artifacts/tests/testLamportOracle.json');
 
-fs.readFile(filePath, 'utf8', (err, data) => {
+fs.readFile(filePathTestLamportOracle, 'utf8', (err, data) => {
     if (err) {
         console.error('Error reading file:', err);
         return;
@@ -66,12 +67,12 @@ fs.readFile(filePath, 'utf8', (err, data) => {
     // Remove redundant "OP_1 OP_MUL"
     result = result.replace(/5195/g, '');
 
-    fs.writeFile(filePath, result, 'utf8', (err) => {
+    fs.writeFile(filePathTestLamportOracle, result, 'utf8', (err) => {
         if (err) {
             console.error('Error writing file:', err);
             return;
         }
 
-        console.log('File updated successfully.');
+        console.log('Post-compile hook completed for:', filePathTestLamportOracle.toString())
     });
 });
