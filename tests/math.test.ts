@@ -9,7 +9,7 @@ import { expect, use } from 'chai'
 import { TestMath } from '../src/contracts/tests/testMath'
 import { Math } from '../src/contracts/math'
 import chaiAsPromised from 'chai-as-promised'
-import { fetchP2WPKHUtxos } from './utils/txHelper';
+import { DISABLE_KEYSPEND_PUBKEY, fetchP2WPKHUtxos } from './utils/txHelper';
 import BN from 'bitcore-lib-inquisition/lib/crypto/bn';
 use(chaiAsPromised)
 
@@ -55,7 +55,7 @@ describe('Test SmartContract `TestMath`', () => {
         scriptTestMath = instance.lockingScript
         const tapleafTestMath = Tap.encodeScript(scriptTestMath.toBuffer())
 
-        const [tpubkeyTestMath, cblockTestMath] = Tap.getPubKey(pubkey.toString(), { target: tapleafTestMath })
+        const [tpubkeyTestMath, cblockTestMath] = Tap.getPubKey(DISABLE_KEYSPEND_PUBKEY, { target: tapleafTestMath })
         cblock = cblockTestMath
         const scriptTestMathP2TR = new btc.Script(`OP_1 32 0x${tpubkeyTestMath}}`)
 

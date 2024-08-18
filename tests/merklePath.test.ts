@@ -8,7 +8,7 @@ dotenv.config();
 import { expect, use } from 'chai'
 import { TestMerklePath } from '../src/contracts/tests/testMerklePath'
 import chaiAsPromised from 'chai-as-promised'
-import { fetchP2WPKHUtxos } from './utils/txHelper';
+import { DISABLE_KEYSPEND_PUBKEY, fetchP2WPKHUtxos } from './utils/txHelper';
 import { Sha256, reverseByteString } from 'scrypt-ts';
 use(chaiAsPromised)
 
@@ -38,7 +38,7 @@ describe('Test SmartContract `TestMerklePath`', () => {
 
         let scriptMerkle = new btc.Script(instance.lockingScript.toHex())
         const tapleafMerkle = Tap.encodeScript(scriptMerkle.toBuffer())
-        const [tpubkeyMerkle, cblockMerkle] = Tap.getPubKey(pubkey.toString(), { target: tapleafMerkle })
+        const [tpubkeyMerkle, cblockMerkle] = Tap.getPubKey(DISABLE_KEYSPEND_PUBKEY, { target: tapleafMerkle })
         const scripMerkleP2TR = new btc.Script(`OP_1 32 0x${tpubkeyMerkle}}`)
 
         // Fetch UTXO's for address

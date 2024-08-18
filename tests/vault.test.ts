@@ -10,7 +10,7 @@ import { VaultTriggerWithdrawal } from '../src/contracts/vaultTriggerWithdrawal'
 import { VaultCompleteWithdrawal } from '../src/contracts/vaultCompleteWithdrawal'
 import { VaultCancelWithdrawal } from '../src/contracts/vaultCancelWithdrawal'
 import chaiAsPromised from 'chai-as-promised'
-import { fetchP2WPKHUtxos, getSigHashSchnorr, getE, splitSighashPreimage } from './utils/txHelper';
+import { fetchP2WPKHUtxos, getSigHashSchnorr, getE, splitSighashPreimage, DISABLE_KEYSPEND_PUBKEY } from './utils/txHelper';
 use(chaiAsPromised)
 
 describe('Test SmartContract `Vault`', () => {
@@ -46,22 +46,22 @@ describe('Test SmartContract `Vault`', () => {
         const scriptVaultCancel = instanceCancel.lockingScript
         const tapleafVaultCancel = Tap.encodeScript(scriptVaultCancel.toBuffer())
 
-        const [tpubkeyVault,] = Tap.getPubKey(pubkey.toString(), { tree: [tapleafVaultTrigger, tapleafVaultComplete, tapleafVaultCancel] })
+        const [tpubkeyVault,] = Tap.getPubKey(DISABLE_KEYSPEND_PUBKEY, { tree: [tapleafVaultTrigger, tapleafVaultComplete, tapleafVaultCancel] })
         const scripVaultP2TR = new btc.Script(`OP_1 32 0x${tpubkeyVault}}`)
 
-        const [, cblockVaultTrigger] = Tap.getPubKey(pubkey.toString(),
+        const [, cblockVaultTrigger] = Tap.getPubKey(DISABLE_KEYSPEND_PUBKEY,
             {
                 target: tapleafVaultTrigger,
                 tree: [tapleafVaultTrigger, tapleafVaultComplete, tapleafVaultCancel]
             }
         )
-        const [, cblockVaultComplete] = Tap.getPubKey(pubkey.toString(),
+        const [, cblockVaultComplete] = Tap.getPubKey(DISABLE_KEYSPEND_PUBKEY,
             {
                 target: tapleafVaultComplete,
                 tree: [tapleafVaultTrigger, tapleafVaultComplete, tapleafVaultCancel]
             }
         )
-        const [, cblockVaultCancel] = Tap.getPubKey(pubkey.toString(),
+        const [, cblockVaultCancel] = Tap.getPubKey(DISABLE_KEYSPEND_PUBKEY,
             {
                 target: tapleafVaultCancel,
                 tree: [tapleafVaultTrigger, tapleafVaultComplete, tapleafVaultCancel]

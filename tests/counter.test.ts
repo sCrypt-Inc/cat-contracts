@@ -8,7 +8,7 @@ dotenv.config();
 import { expect, use } from 'chai'
 import { Counter } from '../src/contracts/counter'
 import chaiAsPromised from 'chai-as-promised'
-import { fetchP2WPKHUtxos, getE, getSigHashSchnorr, splitSighashPreimage } from './utils/txHelper';
+import { DISABLE_KEYSPEND_PUBKEY, fetchP2WPKHUtxos, getE, getSigHashSchnorr, splitSighashPreimage } from './utils/txHelper';
 use(chaiAsPromised)
 
 
@@ -27,7 +27,7 @@ describe('Test SmartContract `Counter`', () => {
         const scriptCounter = instance.lockingScript
         const tapleafCounter = Tap.encodeScript(scriptCounter.toBuffer())
         
-        const [tpubkeyCounter, cblockCounter] = Tap.getPubKey(pubkey.toString(), { target: tapleafCounter })
+        const [tpubkeyCounter, cblockCounter] = Tap.getPubKey(DISABLE_KEYSPEND_PUBKEY, { target: tapleafCounter })
         const scriptCounterP2TR = new btc.Script(`OP_1 32 0x${tpubkeyCounter}}`)
         
         //////// Create fee outputs
