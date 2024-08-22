@@ -1,6 +1,6 @@
-import { assert } from 'console';
 import {
     SmartContractLib,
+    assert,
     method,
     prop,
 } from 'scrypt-ts'
