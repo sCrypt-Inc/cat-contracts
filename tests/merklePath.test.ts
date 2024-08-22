@@ -80,7 +80,7 @@ describe('Test SmartContract `TestMerklePath`', () => {
             )
 
         let witnesses = [
-            Buffer.from('cbb2a68c829e81c816dc1145cde01470825a2377c7c0a2bded7e6c5072786eb5', 'hex'), // Leaf
+            Buffer.from('b56e7872506c7eedbda2c0c777235a827014e0cd4511dc16c8819e828ca6b2cb', 'hex').reverse(), // Leaf / TXID
             Buffer.from('7f75f1028e68841b58eedf5b45b492122fab15b908f13a5487b2d975ff7f465c', 'hex'),
             Buffer.from('02', 'hex'),
             Buffer.from('770d586e084d52a193bddebe580fe6de4aef6486d7227a13d628c2e33d70cf28', 'hex'),

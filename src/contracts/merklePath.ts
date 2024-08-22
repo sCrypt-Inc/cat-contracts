@@ -26,7 +26,7 @@ export type Node = {
     pos: NodePos
 }
 
-export type MerkleProof = FixedArray<Node, typeof MERKLE_PROOF_MAX_DEPTH> // If shorter than 32, pad with invalid nodes.
+export type MerkleProof = FixedArray<Node, typeof MERKLE_PROOF_MAX_DEPTH> // If shorter than max depth, pad with invalid nodes.
 
 export class MerklePath extends SmartContractLib {
 
