@@ -367,10 +367,7 @@ describe('Test SmartContract `TestMath`', () => {
                     bLoHiBuff: Buffer.from('', 'hex'),
                     bLoLoBuff: (new BN(decomposeBigIntTo15BitComponents(1234n)[0].component)).toScriptNumBuffer(),
 
-                    resHiHiHiBuff: Buffer.from('', 'hex'),
-                    resHiHiLoBuff: Buffer.from('', 'hex'),
-                    resHiLoHiBuff: Buffer.from('', 'hex'),
-                    resHiLoLoBuff: Buffer.from('', 'hex'),
+                    resHiBuff: Buffer.from('', 'hex'),
                     resLoHiHiBuff: Buffer.from('', 'hex'),
                     resLoHiLoBuff: Buffer.from('', 'hex'),
                     resLoLoHiBuff: Buffer.from('', 'hex'),
@@ -387,14 +384,28 @@ describe('Test SmartContract `TestMath`', () => {
                     bLoHiBuff: (new BN(decomposeBigIntTo15BitComponents(999921504606846012n)[2].component)).toScriptNumBuffer(),
                     bLoLoBuff: (new BN(decomposeBigIntTo15BitComponents(999921504606846012n)[3].component)).toScriptNumBuffer(),
 
-                    resHiHiHiBuff: Buffer.from('', 'hex'),
-                    resHiHiLoBuff: Buffer.from('', 'hex'),
-                    resHiLoHiBuff: Buffer.from('', 'hex'),
-                    resHiLoLoBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n + 999921504606846012n)[0].component)).toScriptNumBuffer(),
+                    resHiBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n + 999921504606846012n)[0].component)).toScriptNumBuffer(),
                     resLoHiHiBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n + 999921504606846012n)[1].component)).toScriptNumBuffer(),
                     resLoHiLoBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n + 999921504606846012n)[2].component)).toScriptNumBuffer(),
                     resLoLoHiBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n + 999921504606846012n)[3].component)).toScriptNumBuffer(),
                     resLoLoLoBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n + 999921504606846012n)[4].component)).toScriptNumBuffer(),
+                },
+                {
+                    aHiHiBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n)[0].component)).toScriptNumBuffer(),
+                    aHiLoBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n)[1].component)).toScriptNumBuffer(),
+                    aLoHiBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n)[2].component)).toScriptNumBuffer(),
+                    aLoLoBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n)[3].component)).toScriptNumBuffer(),
+
+                    bHiHiBuff: (new BN(decomposeBigIntTo15BitComponents(999921504706846012n)[0].component)).toScriptNumBuffer(),
+                    bHiLoBuff: (new BN(decomposeBigIntTo15BitComponents(999921504706846012n)[1].component)).toScriptNumBuffer(),
+                    bLoHiBuff: (new BN(decomposeBigIntTo15BitComponents(999921504706846012n)[2].component)).toScriptNumBuffer(),
+                    bLoLoBuff: (new BN(decomposeBigIntTo15BitComponents(999921504706846012n)[3].component)).toScriptNumBuffer(),
+
+                    resHiBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n + 999921504706846012n)[0].component)).toScriptNumBuffer(),
+                    resLoHiHiBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n + 999921504706846012n)[1].component)).toScriptNumBuffer(),
+                    resLoHiLoBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n + 999921504706846012n)[2].component)).toScriptNumBuffer(),
+                    resLoLoHiBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n + 999921504706846012n)[3].component)).toScriptNumBuffer(),
+                    resLoLoLoBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n + 999921504706846012n)[4].component)).toScriptNumBuffer(),
                 },
             ]
 
@@ -410,10 +421,7 @@ describe('Test SmartContract `TestMath`', () => {
                     addTestVector.bLoHiBuff,
                     addTestVector.bLoLoBuff,
 
-                    addTestVector.resHiHiHiBuff,
-                    addTestVector.resHiHiLoBuff,
-                    addTestVector.resHiLoHiBuff,
-                    addTestVector.resHiLoLoBuff,
+                    addTestVector.resHiBuff,
                     addTestVector.resLoHiHiBuff,
                     addTestVector.resLoHiLoBuff,
                     addTestVector.resLoLoHiBuff,
@@ -447,10 +455,7 @@ describe('Test SmartContract `TestMath`', () => {
                     bLoHiBuff: Buffer.from('', 'hex'),
                     bLoLoBuff: (new BN(decomposeBigIntTo15BitComponents(1234n)[0].component)).toScriptNumBuffer(),
 
-                    resHiHiHiBuff: Buffer.from('', 'hex'),
-                    resHiHiLoBuff: Buffer.from('', 'hex'),
-                    resHiLoHiBuff: Buffer.from('', 'hex'),
-                    resHiLoLoBuff: Buffer.from('', 'hex'),
+                    resHiBuff: Buffer.from('', 'hex'),
                     resLoHiHiBuff: Buffer.from('', 'hex'),
                     resLoHiLoBuff: Buffer.from('', 'hex'),
                     resLoLoHiBuff: Buffer.from('', 'hex'),
@@ -467,10 +472,7 @@ describe('Test SmartContract `TestMath`', () => {
                     bLoHiBuff: (new BN(decomposeBigIntTo15BitComponents(999921504606846012n)[2].component)).toScriptNumBuffer(),
                     bLoLoBuff: (new BN(decomposeBigIntTo15BitComponents(999921504606846012n)[3].component)).toScriptNumBuffer(),
 
-                    resHiHiHiBuff: Buffer.from('', 'hex'),
-                    resHiHiLoBuff: Buffer.from('', 'hex'),
-                    resHiLoHiBuff: Buffer.from('', 'hex'),
-                    resHiLoLoBuff: Buffer.from('', 'hex'),
+                    resHiBuff: Buffer.from('', 'hex'),
                     resLoHiHiBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n - 999921504606846012n)[0].component)).toScriptNumBuffer(),
                     resLoHiLoBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n - 999921504606846012n)[1].component)).toScriptNumBuffer(),
                     resLoLoHiBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n - 999921504606846012n)[2].component)).toScriptNumBuffer(),
@@ -487,10 +489,7 @@ describe('Test SmartContract `TestMath`', () => {
                     bLoHiBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n)[2].component)).toScriptNumBuffer(),
                     bLoLoBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n)[3].component)).toScriptNumBuffer(),
 
-                    resHiHiHiBuff: Buffer.from('', 'hex'),
-                    resHiHiLoBuff: Buffer.from('', 'hex'),
-                    resHiLoHiBuff: Buffer.from('', 'hex'),
-                    resHiLoLoBuff: Buffer.from('01', 'hex'),
+                    resHiBuff: Buffer.from('01', 'hex'),
                     resLoHiHiBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846976n + (999921504606846012n - 1152921504606846000n))[0].component)).toScriptNumBuffer(),
                     resLoHiLoBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846976n + (999921504606846012n - 1152921504606846000n))[1].component)).toScriptNumBuffer(),
                     resLoLoHiBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846976n + (999921504606846012n - 1152921504606846000n))[2].component)).toScriptNumBuffer(),
@@ -510,10 +509,7 @@ describe('Test SmartContract `TestMath`', () => {
                     addTestVector.bLoHiBuff,
                     addTestVector.bLoLoBuff,
 
-                    addTestVector.resHiHiHiBuff,
-                    addTestVector.resHiHiLoBuff,
-                    addTestVector.resHiLoHiBuff,
-                    addTestVector.resHiLoLoBuff,
+                    addTestVector.resHiBuff,
                     addTestVector.resLoHiHiBuff,
                     addTestVector.resLoHiLoBuff,
                     addTestVector.resLoLoHiBuff,
@@ -531,6 +527,238 @@ describe('Test SmartContract `TestMath`', () => {
                 expect(res).to.be.true
             }
 
+        }
+    })
+    
+    it('should pass addU60', async () => {
+        if (process.env.NETWORK == 'local') {
+            const addTestVectors = [
+                {
+                    aHiHiBuff: Buffer.from('', 'hex'),
+                    aHiLoBuff: Buffer.from('', 'hex'),
+                    aLoHiBuff: Buffer.from('', 'hex'),
+                    aLoLoBuff: (new BN(decomposeBigIntTo15BitComponents(3500n)[0].component)).toScriptNumBuffer(),
+
+                    bHiHiBuff: Buffer.from('', 'hex'),
+                    bHiLoBuff: Buffer.from('', 'hex'),
+                    bLoHiBuff: Buffer.from('', 'hex'),
+                    bLoLoBuff: (new BN(decomposeBigIntTo15BitComponents(1234n)[0].component)).toScriptNumBuffer(),
+
+                    resHiHiBuff: Buffer.from('', 'hex'),
+                    resHiLoBuff: Buffer.from('', 'hex'),
+                    resLoHiBuff: Buffer.from('', 'hex'),
+                    resLoLoBuff: (new BN(decomposeBigIntTo15BitComponents(3500n + 1234n)[0].component)).toScriptNumBuffer(),
+                },
+                {
+                    aHiHiBuff: (new BN(decomposeBigIntTo15BitComponents(152920504606846000n)[0].component)).toScriptNumBuffer(),
+                    aHiLoBuff: (new BN(decomposeBigIntTo15BitComponents(152920504606846000n)[1].component)).toScriptNumBuffer(),
+                    aLoHiBuff: (new BN(decomposeBigIntTo15BitComponents(152920504606846000n)[2].component)).toScriptNumBuffer(),
+                    aLoLoBuff: (new BN(decomposeBigIntTo15BitComponents(152920504606846000n)[3].component)).toScriptNumBuffer(),
+
+                    bHiHiBuff: (new BN(decomposeBigIntTo15BitComponents(999921504606846012n)[0].component)).toScriptNumBuffer(),
+                    bHiLoBuff: (new BN(decomposeBigIntTo15BitComponents(999921504606846012n)[1].component)).toScriptNumBuffer(),
+                    bLoHiBuff: (new BN(decomposeBigIntTo15BitComponents(999921504606846012n)[2].component)).toScriptNumBuffer(),
+                    bLoLoBuff: (new BN(decomposeBigIntTo15BitComponents(999921504606846012n)[3].component)).toScriptNumBuffer(),
+
+                    resHiHiBuff: (new BN(decomposeBigIntTo15BitComponents(152920504606846000n + 999921504606846012n)[0].component)).toScriptNumBuffer(),
+                    resHiLoBuff: (new BN(decomposeBigIntTo15BitComponents(152920504606846000n + 999921504606846012n)[1].component)).toScriptNumBuffer(),
+                    resLoHiBuff: (new BN(decomposeBigIntTo15BitComponents(152920504606846000n + 999921504606846012n)[2].component)).toScriptNumBuffer(),
+                    resLoLoBuff: (new BN(decomposeBigIntTo15BitComponents(152920504606846000n + 999921504606846012n)[3].component)).toScriptNumBuffer(),
+                },
+            ]
+
+            for (const addTestVector of addTestVectors) {
+                let witnesses = [
+                    addTestVector.aHiHiBuff,
+                    addTestVector.aHiLoBuff,
+                    addTestVector.aLoHiBuff,
+                    addTestVector.aLoLoBuff,
+
+                    addTestVector.bHiHiBuff,
+                    addTestVector.bHiLoBuff,
+                    addTestVector.bLoHiBuff,
+                    addTestVector.bLoLoBuff,
+
+                    addTestVector.resHiHiBuff,
+                    addTestVector.resHiLoBuff,
+                    addTestVector.resLoHiBuff,
+                    addTestVector.resLoLoBuff,
+                    Buffer.from('06', 'hex'),
+                    scriptTestMath.toBuffer(),
+                    Buffer.from(cblock, 'hex')
+                ]
+                tx1.inputs[0].witnesses = witnesses
+
+                // Run locally
+                let interpreter = new btc.Script.Interpreter()
+                let flags = btc.Script.Interpreter.SCRIPT_VERIFY_WITNESS | btc.Script.Interpreter.SCRIPT_VERIFY_TAPROOT
+                let res = interpreter.verify(new btc.Script(''), tx0.outputs[0].script, tx1, 0, flags, witnesses, tx0.outputs[0].satoshis)
+                expect(res).to.be.true
+            }
+            
+            const addTestVectorsInvalid = [
+                {
+                    aHiHiBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n)[0].component)).toScriptNumBuffer(),
+                    aHiLoBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n)[1].component)).toScriptNumBuffer(),
+                    aLoHiBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n)[2].component)).toScriptNumBuffer(),
+                    aLoLoBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n)[3].component)).toScriptNumBuffer(),
+
+                    bHiHiBuff: (new BN(decomposeBigIntTo15BitComponents(999921504706846012n)[0].component)).toScriptNumBuffer(),
+                    bHiLoBuff: (new BN(decomposeBigIntTo15BitComponents(999921504706846012n)[1].component)).toScriptNumBuffer(),
+                    bLoHiBuff: (new BN(decomposeBigIntTo15BitComponents(999921504706846012n)[2].component)).toScriptNumBuffer(),
+                    bLoLoBuff: (new BN(decomposeBigIntTo15BitComponents(999921504706846012n)[3].component)).toScriptNumBuffer(),
+
+                    resHiHiBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n + 999921504706846012n)[1].component)).toScriptNumBuffer(),
+                    resHiLoBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n + 999921504706846012n)[2].component)).toScriptNumBuffer(),
+                    resLoHiBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n + 999921504706846012n)[3].component)).toScriptNumBuffer(),
+                    resLoLoBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n + 999921504706846012n)[4].component)).toScriptNumBuffer(),
+                },
+            ]
+
+            for (const addTestVectorInvalid of addTestVectorsInvalid) {
+                let witnesses = [
+                    addTestVectorInvalid.aHiHiBuff,
+                    addTestVectorInvalid.aHiLoBuff,
+                    addTestVectorInvalid.aLoHiBuff,
+                    addTestVectorInvalid.aLoLoBuff,
+
+                    addTestVectorInvalid.bHiHiBuff,
+                    addTestVectorInvalid.bHiLoBuff,
+                    addTestVectorInvalid.bLoHiBuff,
+                    addTestVectorInvalid.bLoLoBuff,
+
+                    addTestVectorInvalid.resHiHiBuff,
+                    addTestVectorInvalid.resHiLoBuff,
+                    addTestVectorInvalid.resLoHiBuff,
+                    addTestVectorInvalid.resLoLoBuff,
+                    Buffer.from('06', 'hex'),
+                    scriptTestMath.toBuffer(),
+                    Buffer.from(cblock, 'hex')
+                ]
+                tx1.inputs[0].witnesses = witnesses
+
+                // Run locally
+                let interpreter = new btc.Script.Interpreter()
+                let flags = btc.Script.Interpreter.SCRIPT_VERIFY_WITNESS | btc.Script.Interpreter.SCRIPT_VERIFY_TAPROOT
+                let res = interpreter.verify(new btc.Script(''), tx0.outputs[0].script, tx1, 0, flags, witnesses, tx0.outputs[0].satoshis)
+                expect(res).to.be.false
+            }
+        }
+    })
+    
+    it('should pass subU60', async () => {
+        if (process.env.NETWORK == 'local') {
+            const subTestVectors = [
+                {
+                    aHiHiBuff: Buffer.from('', 'hex'),
+                    aHiLoBuff: Buffer.from('', 'hex'),
+                    aLoHiBuff: Buffer.from('', 'hex'),
+                    aLoLoBuff: (new BN(decomposeBigIntTo15BitComponents(3500n)[0].component)).toScriptNumBuffer(),
+
+                    bHiHiBuff: Buffer.from('', 'hex'),
+                    bHiLoBuff: Buffer.from('', 'hex'),
+                    bLoHiBuff: Buffer.from('', 'hex'),
+                    bLoLoBuff: (new BN(decomposeBigIntTo15BitComponents(1234n)[0].component)).toScriptNumBuffer(),
+
+                    resHiHiBuff: Buffer.from('', 'hex'),
+                    resHiLoBuff: Buffer.from('', 'hex'),
+                    resLoHiBuff: Buffer.from('', 'hex'),
+                    resLoLoBuff: (new BN(decomposeBigIntTo15BitComponents(3500n - 1234n)[0].component)).toScriptNumBuffer(),
+                },
+                {
+                    aHiHiBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n)[0].component)).toScriptNumBuffer(),
+                    aHiLoBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n)[1].component)).toScriptNumBuffer(),
+                    aLoHiBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n)[2].component)).toScriptNumBuffer(),
+                    aLoLoBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n)[3].component)).toScriptNumBuffer(),
+
+                    bHiHiBuff: (new BN(decomposeBigIntTo15BitComponents(999921504606846012n)[0].component)).toScriptNumBuffer(),
+                    bHiLoBuff: (new BN(decomposeBigIntTo15BitComponents(999921504606846012n)[1].component)).toScriptNumBuffer(),
+                    bLoHiBuff: (new BN(decomposeBigIntTo15BitComponents(999921504606846012n)[2].component)).toScriptNumBuffer(),
+                    bLoLoBuff: (new BN(decomposeBigIntTo15BitComponents(999921504606846012n)[3].component)).toScriptNumBuffer(),
+
+                    resHiHiBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n - 999921504606846012n)[0].component)).toScriptNumBuffer(),
+                    resHiLoBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n - 999921504606846012n)[1].component)).toScriptNumBuffer(),
+                    resLoHiBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n - 999921504606846012n)[2].component)).toScriptNumBuffer(),
+                    resLoLoBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n - 999921504606846012n)[3].component)).toScriptNumBuffer(),
+                },
+            ]
+
+            for (const subTestVector of subTestVectors) {
+                let witnesses = [
+                    subTestVector.aHiHiBuff,
+                    subTestVector.aHiLoBuff,
+                    subTestVector.aLoHiBuff,
+                    subTestVector.aLoLoBuff,
+
+                    subTestVector.bHiHiBuff,
+                    subTestVector.bHiLoBuff,
+                    subTestVector.bLoHiBuff,
+                    subTestVector.bLoLoBuff,
+
+                    subTestVector.resHiHiBuff,
+                    subTestVector.resHiLoBuff,
+                    subTestVector.resLoHiBuff,
+                    subTestVector.resLoLoBuff,
+                    Buffer.from('07', 'hex'),
+                    scriptTestMath.toBuffer(),
+                    Buffer.from(cblock, 'hex')
+                ]
+                tx1.inputs[0].witnesses = witnesses
+
+                // Run locally
+                let interpreter = new btc.Script.Interpreter()
+                let flags = btc.Script.Interpreter.SCRIPT_VERIFY_WITNESS | btc.Script.Interpreter.SCRIPT_VERIFY_TAPROOT
+                let res = interpreter.verify(new btc.Script(''), tx0.outputs[0].script, tx1, 0, flags, witnesses, tx0.outputs[0].satoshis)
+                expect(res).to.be.true
+            }
+            
+            const subTestVectorsInvalid = [
+                {
+                    aHiHiBuff: (new BN(decomposeBigIntTo15BitComponents(999921504606846012n)[0].component)).toScriptNumBuffer(),
+                    aHiLoBuff: (new BN(decomposeBigIntTo15BitComponents(999921504606846012n)[1].component)).toScriptNumBuffer(),
+                    aLoHiBuff: (new BN(decomposeBigIntTo15BitComponents(999921504606846012n)[2].component)).toScriptNumBuffer(),
+                    aLoLoBuff: (new BN(decomposeBigIntTo15BitComponents(999921504606846012n)[3].component)).toScriptNumBuffer(),
+
+                    bHiHiBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n)[0].component)).toScriptNumBuffer(),
+                    bHiLoBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n)[1].component)).toScriptNumBuffer(),
+                    bLoHiBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n)[2].component)).toScriptNumBuffer(),
+                    bLoLoBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846000n)[3].component)).toScriptNumBuffer(),
+
+                    resHiHiBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846976n + (999921504606846012n - 1152921504606846000n))[0].component)).toScriptNumBuffer(),
+                    resHiLoBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846976n + (999921504606846012n - 1152921504606846000n))[1].component)).toScriptNumBuffer(),
+                    resLoHiBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846976n + (999921504606846012n - 1152921504606846000n))[2].component)).toScriptNumBuffer(),
+                    resLoLoBuff: (new BN(decomposeBigIntTo15BitComponents(1152921504606846976n + (999921504606846012n - 1152921504606846000n))[3].component)).toScriptNumBuffer(),
+                },
+            ]
+
+            for (const subTestVectorInvalid of subTestVectorsInvalid) {
+                let witnesses = [
+                    subTestVectorInvalid.aHiHiBuff,
+                    subTestVectorInvalid.aHiLoBuff,
+                    subTestVectorInvalid.aLoHiBuff,
+                    subTestVectorInvalid.aLoLoBuff,
+
+                    subTestVectorInvalid.bHiHiBuff,
+                    subTestVectorInvalid.bHiLoBuff,
+                    subTestVectorInvalid.bLoHiBuff,
+                    subTestVectorInvalid.bLoLoBuff,
+
+                    subTestVectorInvalid.resHiHiBuff,
+                    subTestVectorInvalid.resHiLoBuff,
+                    subTestVectorInvalid.resLoHiBuff,
+                    subTestVectorInvalid.resLoLoBuff,
+                    Buffer.from('07', 'hex'),
+                    scriptTestMath.toBuffer(),
+                    Buffer.from(cblock, 'hex')
+                ]
+                tx1.inputs[0].witnesses = witnesses
+
+                // Run locally
+                let interpreter = new btc.Script.Interpreter()
+                let flags = btc.Script.Interpreter.SCRIPT_VERIFY_WITNESS | btc.Script.Interpreter.SCRIPT_VERIFY_TAPROOT
+                let res = interpreter.verify(new btc.Script(''), tx0.outputs[0].script, tx1, 0, flags, witnesses, tx0.outputs[0].satoshis)
+                expect(res).to.be.false
+            }
         }
     })
 
