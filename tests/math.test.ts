@@ -32,7 +32,7 @@ function decomposeBigIntTo15BitComponents(bigInt: bigint): { component: number, 
     return components.reverse();
 }
 
-function reconstructBigIntFrom15BitComponents(components: { component: number, power: number }[]): bigint {
+function reconstructBigIntFromComponents(components: { component: number, power: number }[]): bigint {
     let bigInt = BigInt(0);
     for (const { component, power } of components) {
         bigInt += BigInt(component) << BigInt(power);
