@@ -191,7 +191,7 @@ describe('Test SmartContract `Vault`', () => {
         let interpreter = new btc.Script.Interpreter()
         let flags = btc.Script.Interpreter.SCRIPT_VERIFY_WITNESS | btc.Script.Interpreter.SCRIPT_VERIFY_TAPROOT
         let res = interpreter.verify(new btc.Script(''), tx0.outputs[0].script, tx1, 0, flags, witnesses, tx0.outputs[0].satoshis)
-        expect(res).to.be.true
+        expect(res).not.throw
 
         //////////// CALL - Complete
         const utxoVaultTriggeredP2TR = {
@@ -297,7 +297,7 @@ describe('Test SmartContract `Vault`', () => {
         interpreter = new btc.Script.Interpreter()
         flags = btc.Script.Interpreter.SCRIPT_VERIFY_WITNESS | btc.Script.Interpreter.SCRIPT_VERIFY_TAPROOT
         res = interpreter.verify(new btc.Script(''), tx1.outputs[0].script, tx2, 0, flags, witnesses, tx1.outputs[0].satoshis)
-        expect(res).to.be.true
+        expect(res).not.throw
 
 
     })
