@@ -289,6 +289,10 @@ describe('Test SmartContract `Vault`', () => {
 
         console.log('tx2 (serialized):', tx2.uncheckedSerialize())
 
+        console.log('txid_0 : ', tx0.id)
+        console.log('txid_1 : ', tx1.id)
+        console.log('txid_2 : ', tx2.id)
+        
         // Run locally
         interpreter = new btc.Script.Interpreter()
         flags = btc.Script.Interpreter.SCRIPT_VERIFY_WITNESS | btc.Script.Interpreter.SCRIPT_VERIFY_TAPROOT
