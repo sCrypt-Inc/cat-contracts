@@ -34,7 +34,6 @@ export class VaultCompleteWithdrawal extends SmartContract {
         targetSPK: ByteString,
         feePrevout: ByteString
     ) {
-        // Enforce relative locktime.
         this.csv(this.sequenceVal)
 
         // Check sighash preimage.
@@ -52,13 +51,13 @@ export class VaultCompleteWithdrawal extends SmartContract {
             'Withdrawal amount exceeds vault balance.'
         )
 
-        // Construct the previous tx.
+        
         const dust = toByteString('2202000000000000')
         const prevTxId = hash256(
             prevTxVer +
                 prevTxInputContract +
                 prevTxInputFee +
-                toByteString('02') +
+                toByteString('02') + 
                 withdrawalAmt +
                 targetSPK +
                 int2ByteString(remainingVaultAmt) +
@@ -74,17 +73,25 @@ export class VaultCompleteWithdrawal extends SmartContract {
         assert(hashPrevouts == shPreimage.hashPrevouts, 'hashPrevouts mismatch')
 
         // Enforce outputs.
-        const hashOutputs = sha256(
-            withdrawalAmt +
-                targetSPK +
-                int2ByteString(remainingVaultAmt) +
-                vaultSPK
-        )
+        let hashOutputs: ByteString = toByteString('')
+        if (remainingVaultAmt == 0n) {
+            hashOutputs = sha256(
+                withdrawalAmt + targetSPK
+            )
+        } else {
+            hashOutputs = sha256(
+                int2ByteString(remainingVaultAmt) + vaultSPK +
+                withdrawalAmt + targetSPK
+            )
+        }
+
         assert(hashOutputs == shPreimage.hashOutputs, 'hashOutputs mismatch')
     }
 
     @method()
     private csv(sequenceVal: bigint): void {
+          // ... Gets substituted for OP_CSV w/ inline assembly hook
+        // TODO: Rm once OP_CSV is added to compiler.
         assert(true)
     }
 }
