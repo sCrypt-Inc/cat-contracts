@@ -1,8 +1,6 @@
 import {
     assert,
     ByteString,
-    byteString2Int,
-    int2ByteString,
     method,
     prop,
     PubKey,
@@ -13,7 +11,9 @@ import {
 } from 'scrypt-ts'
 import { SHPreimage, SigHashUtils } from './sigHashUtils'
 
+
 export class VaultTriggerWithdrawal extends SmartContract {
+
     @prop()
     withdrawalPubKey: PubKey
 
@@ -22,7 +22,9 @@ export class VaultTriggerWithdrawal extends SmartContract {
      * @param withdrawalPubKey - Public key, used for withdrawal.
      *
      */
-    constructor(withdrawalPubKey: PubKey) {
+    constructor(
+        withdrawalPubKey: PubKey,
+    ) {
         super(...arguments)
         this.withdrawalPubKey = withdrawalPubKey
     }
@@ -34,7 +36,6 @@ export class VaultTriggerWithdrawal extends SmartContract {
         vaultSPK: ByteString,
         feeSPK: ByteString,
         vaultAmt: ByteString,
-        withdrawalAmt: ByteString,
         feeAmt: ByteString,
         targetSPK: ByteString
     ) {
@@ -47,33 +48,17 @@ export class VaultTriggerWithdrawal extends SmartContract {
 
         // Enforce spent scripts.
         const hashSpentScripts = sha256(vaultSPK + feeSPK)
-        assert(
-            hashSpentScripts == shPreimage.hashSpentScripts,
-            'hashSpentScripts mismatch'
-        )
+        assert(hashSpentScripts == shPreimage.hashSpentScripts, 'hashSpentScripts mismatch')
 
         // Enforce spent amounts.
         const hashSpentAmounts = sha256(vaultAmt + feeAmt)
-        assert(
-            hashSpentAmounts == shPreimage.hashSpentAmounts,
-            'hashSpentAmounts mismatch'
-        )
-
-        const remainingVaultAmt: bigint =
-            byteString2Int(vaultAmt) - byteString2Int(withdrawalAmt)
-        assert(
-            remainingVaultAmt >= 0,
-            'Withdrawal amount exceeds vault balance.'
-        )
+        assert(hashSpentAmounts == shPreimage.hashSpentAmounts, 'hashSpentAmounts mismatch')
 
         // Enforce outputs.
         const dust = toByteString('2202000000000000')
         const hashOutputs = sha256(
-            withdrawalAmt +
-                targetSPK +
-                int2ByteString(remainingVaultAmt) +
-                vaultSPK +
-                dust
+            vaultAmt + vaultSPK +
+            dust + targetSPK
         )
         assert(hashOutputs == shPreimage.hashOutputs, 'hashOutputs mismatch')
     }
