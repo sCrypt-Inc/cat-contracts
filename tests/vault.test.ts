@@ -1,5 +1,6 @@
 // @ts-ignore
 import btc = require('bitcore-lib-inquisition')
+import BN from 'bitcore-lib-inquisition/lib/crypto/bn';
 import { Tap } from '@cmdcode/tapscript' // Requires node >= 19
 
 import * as dotenv from 'dotenv'
@@ -16,7 +17,7 @@ import {
     getE,
     splitSighashPreimage,
     DISABLE_KEYSPEND_PUBKEY,
-} from './utils/txHelper1'
+} from './utils/txHelper'
 use(chaiAsPromised)
 
 describe('Test SmartContract `Vault`', () => {
@@ -107,32 +108,35 @@ describe('Test SmartContract `Vault`', () => {
         }
         console.log(utxos)
 
+        const vaultAmt = 2000n
+
         const tx0 = new btc.Transaction()
             .from(utxos)
             .addOutput(
                 new btc.Transaction.Output({
-                    satoshis: 1000,
+                    satoshis: Number(vaultAmt),
                     script: scripVaultP2TR,
                 })
             )
             .change(addrP2WPKH)
             .feePerByte(2)
             .sign(seckey)
+            
         const vaultAmtBuff = Buffer.alloc(8)
-        vaultAmtBuff.writeBigInt64LE(1000n)
+        vaultAmtBuff.writeBigInt64LE(vaultAmt)
 
         console.log('tx0 (serialized):', tx0.uncheckedSerialize())
 
         //////// Create fee outputs
         const feeAmtBuff = Buffer.alloc(8)
-        feeAmtBuff.writeBigInt64LE(3500n)
+        feeAmtBuff.writeBigInt64LE(4500n)
 
         utxos = await fetchP2WPKHUtxos(addrP2WPKH)
 
         const txFee = new btc.Transaction()
             .from(utxos)
-            .to(addrP2WPKH, 3500)
-            .to(addrP2WPKH, 3500)
+            .to(addrP2WPKH, 4500)
+            .to(addrP2WPKH, 4500)
             .change(addrP2WPKH)
             .feePerByte(2)
             .sign(seckey)
@@ -258,6 +262,15 @@ describe('Test SmartContract `Vault`', () => {
         expect(res).to.be.true
 
         //////////// CALL - Complete
+        const withdrawalAmt = 1000n 
+        const remainingAmt = vaultAmt - withdrawalAmt
+
+        const withdrawalAmtBuff = Buffer.alloc(8)
+        withdrawalAmtBuff.writeBigInt64LE(withdrawalAmt)
+
+        const remainingAmtBuff = Buffer.alloc(8)
+        remainingAmtBuff.writeBigInt64LE(remainingAmt)
+
         const utxoVaultTriggeredP2TR = {
             txId: tx1.id,
             outputIndex: 0,
@@ -272,14 +285,20 @@ describe('Test SmartContract `Vault`', () => {
             script: new btc.Script(addrP2WPKH),
             satoshis: txFee.outputs[1].satoshis,
         }
+        
+        const vaultOut = new btc.Transaction.Output({
+            satoshis: tx1.outputs[0].satoshis - Number(withdrawalAmt),
+            script: scripVaultP2TR,
+        })
 
         const destOut = new btc.Transaction.Output({
-            satoshis: tx1.outputs[0].satoshis,
+            satoshis: Number(withdrawalAmt),
             script: new btc.Script(addrP2WPKH),
         })
 
         const tx2 = new btc.Transaction()
             .from([utxoVaultTriggeredP2TR, feeUTXO2])
+            .addOutput(vaultOut)
             .addOutput(destOut)
 
         tx2.inputs[0].lockUntilBlockHeight(2)
@@ -333,7 +352,7 @@ describe('Test SmartContract `Vault`', () => {
         let feePrevout = new btc.encoding.BufferWriter()
         feePrevout.writeReverse(tx2.inputs[1].prevTxId)
         feePrevout.writeInt32LE(tx2.inputs[1].outputIndex)
-
+        
         witnesses = [
             preimageParts.txVersion,
             preimageParts.nLockTime,
@@ -358,7 +377,8 @@ describe('Test SmartContract `Vault`', () => {
                 Buffer.from('22', 'hex'),
                 scripVaultP2TR.toBuffer(),
             ]),
-            vaultAmtBuff,
+            new BN(Number(vaultAmt)).toScriptNumBuffer(),
+            new BN(Number(withdrawalAmt)).toScriptNumBuffer(),
             Buffer.concat([
                 Buffer.from('16', 'hex'),
                 targetOut.script.toBuffer(),
@@ -378,7 +398,8 @@ describe('Test SmartContract `Vault`', () => {
         interpreter = new btc.Script.Interpreter()
         flags =
             btc.Script.Interpreter.SCRIPT_VERIFY_WITNESS |
-            btc.Script.Interpreter.SCRIPT_VERIFY_TAPROOT
+            btc.Script.Interpreter.SCRIPT_VERIFY_TAPROOT |
+            btc.Script.Interpreter.SCRIPT_VERIFY_DISCOURAGE_OP_SUCCESS
         res = interpreter.verify(
             new btc.Script(''),
             tx1.outputs[0].script,
@@ -388,6 +409,7 @@ describe('Test SmartContract `Vault`', () => {
             witnesses,
             tx1.outputs[0].satoshis
         )
+
         expect(res).to.be.true
     })
 })
