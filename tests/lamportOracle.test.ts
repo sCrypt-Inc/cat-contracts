@@ -42,9 +42,10 @@ describe('Test SmartContract `TestLamportOracle`', () => {
 
         msg = [true, false, true, false, true, false, true, false]
 
-        sig = msg.map(
-            (bit, idx) => privKey[bit ? idx : LAMPORT_MSG_BITS + idx]
-        ) as LamportSig
+         sig = lamportKeys.slice(0, 8) as LamportSig 
+         //msg.map(
+        //     (bit, idx) => privKey[bit ? idx : LAMPORT_MSG_BITS + idx]
+        // ) as LamportSig
 
         const leaf = LamportOracle.pubKey2Leaf(pubKey)
 
@@ -60,9 +61,20 @@ describe('Test SmartContract `TestLamportOracle`', () => {
 
         console.log('Script:', instance.lockingScript.toASM())
         console.log('Script len:', instance.lockingScript.toBuffer().length)
+        console.log('Script:', instance.lockingScript.toASM())
+        console.log('Script len:', instance.lockingScript.toBuffer().length)
+        console.log('Public Key:', pubKey)
+        console.log('Signature:', sig)
+        console.log('Merkle Proof:', pubKeyProof)
     })
-
     it('should pass oracle sig verify', async () => {
+        console.log('Testing with: ', {
+            msg,
+            sig,
+            pubKey,
+            pubKeyProof,
+        })
+
         await expect(instance.testVerifyMsg(msg, sig, pubKey, pubKeyProof)).to
             .be.true
     })
