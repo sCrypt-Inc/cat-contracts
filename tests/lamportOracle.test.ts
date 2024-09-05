@@ -64,6 +64,6 @@ describe('Test SmartContract `TestLamportOracle`', () => {
 
     it('should pass oracle sig verify', async () => {
         await expect(instance.testVerifyMsg(msg, sig, pubKey, pubKeyProof)).to
-            .be.rejectedWith('/failed')
+            .be.true
     })
 })
