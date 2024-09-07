@@ -6,7 +6,7 @@ import * as dotenv from 'dotenv'
 dotenv.config()
 
 import { expect, use } from 'chai'
-import { TestLamportOracle } from '../src/contracts/testLamportOracle'
+import { TestLamportOracle } from '../src/contracts/tests/testLamportOracle'
 import {
     LamportOracle,
     LamportMsg,
