@@ -1,6 +1,6 @@
 // @ts-ignore
 import btc = require('bitcore-lib-inquisition');
-import { Tap } from '@cmdcode/tapscript'  // Requires node >= 19
+//import { Tap } from '@cmdcode/tapscript'  // Requires node >= 19
 
 import * as dotenv from 'dotenv';
 dotenv.config();
@@ -25,9 +25,9 @@ describe('Test SmartContract `Counter`', () => {
 
         const instance = new Counter()
         const scriptCounter = instance.lockingScript
-        const tapleafCounter = Tap.encodeScript(scriptCounter.toBuffer())
+        const tapleafCounter = btc.Tap.encodeScript(scriptCounter.toBuffer())
         
-        const [tpubkeyCounter, cblockCounter] = Tap.getPubKey(DISABLE_KEYSPEND_PUBKEY, { target: tapleafCounter })
+        const [tpubkeyCounter, cblockCounter] = btc.Tap.getPubKey(DISABLE_KEYSPEND_PUBKEY, { target: tapleafCounter })
         const scriptCounterP2TR = new btc.Script(`OP_1 32 0x${tpubkeyCounter}}`)
         
         //////// Create fee outputs
