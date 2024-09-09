@@ -1,4 +1,4 @@
-import { PrivateKey, PublicKey, crypto } from 'bitcore-lib'
+import { PrivateKey, PublicKey, crypto } from 'bitcore-lib-inquisition'
 import * as dotenv from 'dotenv'
 import * as fs from 'fs'
 
