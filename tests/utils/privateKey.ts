@@ -1,3 +1,4 @@
+// @ts-ignore
 import * as btc from 'bitcore-lib-inquisition';
 import * as dotenv from 'dotenv';
 import * as fs from 'fs';
