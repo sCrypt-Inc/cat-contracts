@@ -1,36 +1,34 @@
-import { bsv } from 'scrypt-ts'
-import * as dotenv from 'dotenv'
-import * as fs from 'fs'
+// @ts-ignore
+import * as btc from 'bitcore-lib-inquisition';
+import * as dotenv from 'dotenv';
+import * as fs from 'fs';
 
-export function genPrivKey(network: bsv.Networks.Network): bsv.PrivateKey {
+export function genPrivKey(network: 'testnet' | 'livenet' = 'testnet'): btc.PrivateKey {
     dotenv.config({
         path: '.env',
-    })
+    });
 
-    const privKeyStr = process.env.PRIVATE_KEY
-    let privKey: bsv.PrivateKey
+    const privKeyStr = process.env.PRIVATE_KEY;
+    let privKey: btc.PrivateKey;
+
     if (privKeyStr) {
-        privKey = bsv.PrivateKey.fromWIF(privKeyStr as string)
-        console.log(`Private key already present ...`)
+        privKey = new btc.PrivateKey(privKeyStr);
+        console.log(`Private key already present ...`);
     } else {
-        privKey = bsv.PrivateKey.fromRandom(network)
-        console.log(`Private key generated and saved in "${'.env'}"`)
-        console.log(`Publickey: ${privKey.publicKey}`)
-        console.log(`Address: ${privKey.toAddress()}`)
-        fs.writeFileSync('.env', `PRIVATE_KEY="${privKey}"`)
+        privKey = new btc.PrivateKey(undefined, network);
+        console.log(`Private key generated and saved in "${'.env'}"`);
+        console.log(`Public key: ${privKey.publicKey.toString()}`);
+        console.log(`Address: ${privKey.toAddress(network, btc.Address.PayToWitnessPublicKeyHash).toString()}`);
+        fs.writeFileSync('.env', `PRIVATE_KEY="${privKey.toString()}"`);
     }
 
-    const fundMessage = `You can fund its address '${privKey.toAddress()}' from the sCrypt faucet https://scrypt.io/faucet`
+    const fundMessage = `You can fund its address '${privKey.toAddress(network, btc.Address.PayToWitnessPublicKeyHash)}' from a Bitcoin ${network} faucet`;
+    console.log(fundMessage);
 
-    console.log(fundMessage)
-
-    return privKey
+    return privKey;
 }
 
-export const myPrivateKey = genPrivKey(bsv.Networks.testnet)
-
-export const myPublicKey = bsv.PublicKey.fromPrivateKey(myPrivateKey)
-export const myPublicKeyHash = bsv.crypto.Hash.sha256ripemd160(
-    myPublicKey.toBuffer()
-)
-export const myAddress = myPublicKey.toAddress()
+export const myPrivateKey = genPrivKey('testnet');
+export const myPublicKey = myPrivateKey.publicKey;
+export const myPublicKeyHash = btc.crypto.Hash.sha256ripemd160(myPublicKey.toBuffer());
+export const myAddress = myPrivateKey.toAddress('testnet', btc.Address.PayToWitnessPublicKeyHash);
