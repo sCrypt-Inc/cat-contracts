@@ -18,11 +18,11 @@ export function genPrivKey(network: 'testnet' | 'livenet' = 'testnet'): btc.Priv
         privKey = new btc.PrivateKey(undefined, network);
         console.log(`Private key generated and saved in "${'.env'}"`);
         console.log(`Public key: ${privKey.publicKey.toString()}`);
-        console.log(`Address: ${privKey.toAddress().toString()}`);
+        console.log(`Address: ${privKey.toAddress(network, btc.Address.PayToWitnessPublicKeyHash).toString()}`);
         fs.writeFileSync('.env', `PRIVATE_KEY="${privKey.toString()}"`);
     }
 
-    const fundMessage = `You can fund its address '${privKey.toAddress()}' from a Bitcoin ${network} faucet`;
+    const fundMessage = `You can fund its address '${privKey.toAddress(network, btc.Address.PayToWitnessPublicKeyHash)}' from a Bitcoin ${network} faucet`;
     console.log(fundMessage);
 
     return privKey;
@@ -31,4 +31,4 @@ export function genPrivKey(network: 'testnet' | 'livenet' = 'testnet'): btc.Priv
 export const myPrivateKey = genPrivKey('testnet');
 export const myPublicKey = myPrivateKey.publicKey;
 export const myPublicKeyHash = btc.crypto.Hash.sha256ripemd160(myPublicKey.toBuffer());
-export const myAddress = myPrivateKey.toAddress();
+export const myAddress = myPrivateKey.toAddress('testnet', btc.Address.PayToWitnessPublicKeyHash);
