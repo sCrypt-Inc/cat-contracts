@@ -1,4 +1,4 @@
-// @ts-ignore
+// @ts-expect-error - ignore TS errors
 import btc = require('bitcore-lib-inquisition');
 import { Tap } from '@cmdcode/tapscript'  // Requires node >= 19
 
@@ -20,7 +20,6 @@ describe('Test SmartContract `Counter`', () => {
 
     it('should pass', async () => {
         const seckey = new btc.PrivateKey(process.env.PRIVATE_KEY, btc.Networks.testnet)
-        const pubkey = seckey.toPublicKey()
         const addrP2WPKH = seckey.toAddress(null, btc.Address.PayToWitnessPublicKeyHash)
 
         const instance = new Counter()
@@ -131,8 +130,6 @@ describe('Test SmartContract `Counter`', () => {
         let _e = eBuff.slice(0, eBuff.length - 1) // e' - e without last byte
         let preimageParts = splitSighashPreimage(sighash.preimage)
 
-        let sig = btc.crypto.Schnorr.sign(seckey, sighash.hash);
-
         // Also sign fee input
         let hashData = btc.crypto.Hash.sha256ripemd160(seckey.publicKey.toBuffer());
         let signatures = tx1.inputs[1].getSignatures(tx1, seckey, 1, undefined, hashData, undefined, undefined)
@@ -175,10 +172,9 @@ describe('Test SmartContract `Counter`', () => {
             prevTxLocktime,
             prevTxInputContract.toBuffer(),
             prevTxInputFee.toBuffer(),
-            feePrevout.toBuffer(),
             Buffer.concat([Buffer.from('22', 'hex'), scriptCounterP2TR.toBuffer()]),
             counterAmtBuff,
-            counterAmtBuff,
+            feePrevout.toBuffer(),
             Buffer.from('', 'hex'), // OP_0
             scriptCounter.toBuffer(),
             Buffer.from(cblockCounter, 'hex')
@@ -234,8 +230,6 @@ describe('Test SmartContract `Counter`', () => {
         _e = eBuff.slice(0, eBuff.length - 1) // e' - e without last byte
         preimageParts = splitSighashPreimage(sighash.preimage)
 
-        sig = btc.crypto.Schnorr.sign(seckey, sighash.hash);
-
         // Also sign fee input
         hashData = btc.crypto.Hash.sha256ripemd160(seckey.publicKey.toBuffer());
         signatures = tx2.inputs[1].getSignatures(tx2, seckey, 1, undefined, hashData, undefined, undefined)
@@ -278,10 +272,9 @@ describe('Test SmartContract `Counter`', () => {
             prevTxLocktime,
             prevTxInputContract.toBuffer(),
             prevTxInputFee.toBuffer(),
-            feePrevout.toBuffer(),
             Buffer.concat([Buffer.from('22', 'hex'), scriptCounterP2TR.toBuffer()]),
             counterAmtBuff,
-            counterAmtBuff,
+            feePrevout.toBuffer(),
             Buffer.from('01', 'hex'), // OP_1
             scriptCounter.toBuffer(),
             Buffer.from(cblockCounter, 'hex')

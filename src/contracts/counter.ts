@@ -9,11 +9,19 @@ import {
     SmartContract,
     toByteString,
     int2ByteString,
-    len,
-    Utils
+    len
 } from 'scrypt-ts'
 import { SHPreimage, SigHashUtils } from './sigHashUtils'
 
+
+export type CounterPrevTx = {
+    ver: ByteString
+    locktime: ByteString
+    inputContract: ByteString // Includes input count prefix...
+    inputFee: ByteString,
+    contractOutputSPK: ByteString, // contract output scriptPubKey
+    contractOutputAmount: ByteString, // contract output amount
+}
 
 export class Counter extends SmartContract {
 
@@ -27,14 +35,8 @@ export class Counter extends SmartContract {
     @method()
     public increment(
         shPreimage: SHPreimage,
-        prevTxVer: ByteString,
-        prevTxLocktime: ByteString,
-        prevTxInputContract: ByteString, // First input includes input count prefix...
-        prevTxInputFee: ByteString,
+        prevTx: CounterPrevTx,
         feePrevout: ByteString,
-        contractOutputSPK: ByteString, // contract output scriptPubKey
-        contractOutputAmount: ByteString, // contract output amount
-        contractOutputAmountNew: ByteString, // updated contract output amount
         count: bigint
     ) {
         // Check sighash preimage.
@@ -42,45 +44,48 @@ export class Counter extends SmartContract {
         assert(this.checkSig(s, SigHashUtils.Gx))
 
         // Construct prev tx.
-        const opreturnScript = OpCode.OP_RETURN + Counter.writeCount(int2ByteString(count))
-        const opreturnOutput =
-            Counter.ZEROSAT +
-            int2ByteString(len(opreturnScript)) +
-            opreturnScript
-        const prevTxId = hash256(
-            prevTxVer +
-            prevTxInputContract +
-            prevTxInputFee +
-            toByteString('02') +
-            contractOutputAmount +
-            contractOutputSPK +
-            opreturnOutput +
-            prevTxLocktime
-        )
+        const prevTxId = Counter.getPrevTxId(prevTx, count)
 
-        // Validate prev tx.
-        const hashPrevouts = sha256(
-            prevTxId + toByteString('00000000') + feePrevout
-        )
-        assert(hashPrevouts == shPreimage.hashPrevouts, 'hashPrevouts mismatch')
-        assert(
-            shPreimage.inputNumber == toByteString('00000000'), 'contract must be called via first input'
-        )
+        // Check prevouts to validate first input actually unlocks prev counter instance.
+        const prevTxOutIdx = toByteString('00000000')
+        const hashPrevouts = sha256(prevTxId + prevTxOutIdx + feePrevout)
+        assert(hashPrevouts == shPreimage.hashPrevouts)
+
+        // Check counter covenant is called via first input.
+        assert(shPreimage.inputNumber == toByteString('00000000'))
 
         // Increment counter.
         const newCount = count + 1n
-        const opreturnScriptNew = OpCode.OP_RETURN + Counter.writeCount(int2ByteString(newCount))
-        const opreturnOutputNew =
-            Counter.ZEROSAT +
-            int2ByteString(len(opreturnScriptNew)) +
-            opreturnScriptNew
+        const stateOut = Counter.getStateOut(newCount)
 
         // Enforce outputs.
         const hashOutputs = sha256(
             // recurse: same scriptPubKey
-            contractOutputAmountNew + contractOutputSPK + opreturnOutputNew
+            prevTx.contractOutputAmount + prevTx.contractOutputSPK + stateOut
         )
-        assert(hashOutputs == shPreimage.hashOutputs, 'hashOutputs mismatch')
+        assert(hashOutputs == shPreimage.hashOutputs)
+    }
+
+    @method()
+    static getPrevTxId(prevTx: CounterPrevTx, count: bigint): ByteString {
+        return hash256(
+            prevTx.ver +
+            prevTx.inputContract +
+            prevTx.inputFee +
+            toByteString('02') +
+            prevTx.contractOutputAmount +
+            prevTx.contractOutputSPK +
+            Counter.getStateOut(count) +
+            prevTx.locktime
+        )
+    }
+
+    @method()
+    static getStateOut(count: bigint): ByteString {
+        const opreturnScript = OpCode.OP_RETURN + Counter.writeCount(int2ByteString(count))
+        return Counter.ZEROSAT +
+            int2ByteString(len(opreturnScript)) +
+            opreturnScript
     }
 
     @method()
@@ -88,7 +93,7 @@ export class Counter extends SmartContract {
         const n: bigint = len(b)
 
         let header: ByteString = toByteString('')
-        
+
         if (b == toByteString('')) {
             header = toByteString('0100')
         } else if (n < 0x4c) {
