@@ -1,2 +1,1 @@
-- make genprivkey generate BTC address
-- rebase bitcore lib, get rid of tapscript dependency if possible
+- Add exhaustive lenght checks on txn parts passed as witnesses.
