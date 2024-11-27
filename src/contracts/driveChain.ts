@@ -354,10 +354,11 @@ export class DriveChain extends SmartContract {
     static getCoinbaseTxId(tx: CoinbaseTx): ByteString {
         return hash256(
             toByteString(
-                '02000000010000000000000000000000000000000000000000000000000000000000000000ffffffff'
+                '01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff'
             ) +
                 tx.inputScriptPrefix +
                 DriveChain.padBlockHeight(tx.blockHeight) +
+                tx.inputScriptSuffix +
                 tx.outputs +
                 tx.locktime
         )
