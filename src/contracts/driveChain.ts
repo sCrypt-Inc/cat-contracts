@@ -22,8 +22,8 @@ export type DriveChainTx = {
     locktime: ByteString
     inputContract: ByteString // Includes input count prefix...
     inputFee: ByteString
-    contractOutputSPK: ByteString // contract output scriptPubKey
-    contractOutputAmount: ByteString // contract output amount
+    contractOutputSPK: ByteString
+    contractOutputAmount: bigint
     stateHash: Sha256
     payoutOut: ByteString
 }
@@ -73,15 +73,19 @@ export class DriveChain extends SmartContract {
         // Check passed spent amounts info is valid.
         assert(
             shPreimage.hashSpentAmounts ==
-                sha256(DriveChain.padAmt(amtBridged) + spentAmountsSuffix)
+                sha256(
+                    DriveChain.padAmt(prevTx.contractOutputAmount) +
+                        DriveChain.padAmt(amtBridged) +
+                        spentAmountsSuffix
+                )
         )
 
         // Check bridged amount is sufficient.
         assert(amtBridged > 10000n)
 
-        // Enforce outputs.
+        // Ensure state transition is reflected in outputs.
         const hashOutputs = sha256(
-            prevTx.contractOutputAmount +
+            DriveChain.padAmt(prevTx.contractOutputAmount + amtBridged) +
                 prevTx.contractOutputSPK +
                 DriveChain.getStateOut(prevTx.stateHash)
         )
@@ -131,9 +135,9 @@ export class DriveChain extends SmartContract {
             payoutSPK: payoutSPK,
         }
 
-        // Enforce outputs.
+        // Ensure state transition is reflected in outputs.
         const hashOutputs = sha256(
-            prevTx.contractOutputAmount +
+            DriveChain.padAmt(prevTx.contractOutputAmount) +
                 prevTx.contractOutputSPK +
                 DriveChain.getStateOut(DriveChain.getStateHash(newState))
         )
@@ -148,7 +152,8 @@ export class DriveChain extends SmartContract {
         coinbaseTx: CoinbaseTx,
         currentState: DriveChainState,
         agree: boolean,
-        feePrevout: ByteString
+        feePrevout: ByteString,
+        changeOut: ByteString
     ) {
         this.checkContractContextVote(
             shPreimage,
@@ -164,18 +169,19 @@ export class DriveChain extends SmartContract {
         assert(coinbaseTx.blockHeight > currentState.startPeriod)
 
         // Adjust vote count.
-        // Implements 66% agree-voting threshold
+        // Implements 66% agree-voting threshold.
         if (agree) {
             currentState.voteCnt += 1n
         } else {
             currentState.voteCnt -= 2n
         }
 
-        // Enforce outputs.
+        // Ensure state transition is reflected in outputs.
         const hashOutputs = sha256(
-            prevTx.contractOutputAmount +
+            DriveChain.padAmt(prevTx.contractOutputAmount) +
                 prevTx.contractOutputSPK +
-                DriveChain.getStateOut(DriveChain.getStateHash(currentState))
+                DriveChain.getStateOut(DriveChain.getStateHash(currentState)) +
+                changeOut
         )
         assert(hashOutputs == shPreimage.hashOutputs)
     }
@@ -215,9 +221,9 @@ export class DriveChain extends SmartContract {
             payoutSPK: toByteString(''),
         }
 
-        // Enforce outputs.
+        // Ensure state transition is reflected in outputs.
         const hashOutputs = sha256(
-            prevTx.contractOutputAmount +
+            DriveChain.padAmt(prevTx.contractOutputAmount) +
                 prevTx.contractOutputSPK +
                 DriveChain.getStateOut(DriveChain.getStateHash(newState)) +
                 payoutOut
@@ -342,7 +348,7 @@ export class DriveChain extends SmartContract {
                 tx.inputContract +
                 tx.inputFee +
                 outLen +
-                tx.contractOutputAmount +
+                DriveChain.padAmt(tx.contractOutputAmount) +
                 tx.contractOutputSPK +
                 DriveChain.getStateOut(tx.stateHash) +
                 tx.payoutOut +
