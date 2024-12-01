@@ -11,9 +11,12 @@ import {
     toByteString,
 } from 'scrypt-ts'
 
-export const TAG_HASH = '7bb52d7a9fef58323eb1bf7a407db382d2f3f2d81bb1224f49fe518f6d48d37c' // sha256("BIP0340/challenge")
-export const TAPSIGHASH = 'f40a48df4b2a70c8b4924bf2654661ed3d95fd66a313eb87237597c628e4a031'  // sha256("TapSighash")
-export const Gx = '79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798'
+export const TAG_HASH =
+    '7bb52d7a9fef58323eb1bf7a407db382d2f3f2d81bb1224f49fe518f6d48d37c' // sha256("BIP0340/challenge")
+export const TAPSIGHASH =
+    'f40a48df4b2a70c8b4924bf2654661ed3d95fd66a313eb87237597c628e4a031' // sha256("TapSighash")
+export const Gx =
+    '79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798'
 export const PREIMAGE_SIGHASH = '00' // SIGHASH_ALL
 export const PREIMAGE_EPOCH = '00'
 
@@ -32,8 +35,8 @@ export type SHPreimage = {
     codeSeparator: ByteString
 
     sigHash: ByteString
-    _e: ByteString      // e without last byte
-    eSuffix: bigint     // last byte of e
+    _e: ByteString // e without last byte
+    eSuffix: bigint // last byte of e
 }
 
 export class SigHashUtils extends SmartContractLib {
@@ -55,25 +58,32 @@ export class SigHashUtils extends SmartContractLib {
 
     @method()
     static checkSHPreimage(shPreimage: SHPreimage): Sig {
-        assert(shPreimage.eSuffix > -127n && shPreimage.eSuffix < 127n, 'e suffix not in range [-126, 127)')
         const e = sha256(SigHashUtils.ePreimagePrefix + shPreimage.sigHash)
-        assert(e == shPreimage._e + int2ByteString(shPreimage.eSuffix), 'invalid value of _e')
-        const sDelta: bigint = shPreimage.eSuffix < 0n ? -1n : 1n;
-        const s = SigHashUtils.Gx + shPreimage._e + int2ByteString(shPreimage.eSuffix + sDelta)
+        const eSuffix =
+            shPreimage.eSuffix == 0n
+                ? toByteString('00')
+                : int2ByteString(shPreimage.eSuffix)
+        const sDelta: bigint = shPreimage.eSuffix < 0n ? -1n : 1n
+        const sSuffix =
+            shPreimage.eSuffix + sDelta == 0n
+                ? toByteString('00')
+                : int2ByteString(shPreimage.eSuffix + sDelta)
+        assert(e == shPreimage._e + eSuffix, 'invalid value of _e')
+        const s = SigHashUtils.Gx + shPreimage._e + sSuffix
         const sigHash = sha256(
             SigHashUtils.preimagePrefix +
-            shPreimage.txVer +
-            shPreimage.nLockTime +
-            shPreimage.hashPrevouts +
-            shPreimage.hashSpentAmounts +
-            shPreimage.hashSpentScripts +
-            shPreimage.hashSequences +
-            shPreimage.hashOutputs +
-            shPreimage.spendType +
-            shPreimage.inputNumber +
-            shPreimage.hashTapLeaf +
-            shPreimage.keyVer +
-            shPreimage.codeSeparator
+                shPreimage.txVer +
+                shPreimage.nLockTime +
+                shPreimage.hashPrevouts +
+                shPreimage.hashSpentAmounts +
+                shPreimage.hashSpentScripts +
+                shPreimage.hashSequences +
+                shPreimage.hashOutputs +
+                shPreimage.spendType +
+                shPreimage.inputNumber +
+                shPreimage.hashTapLeaf +
+                shPreimage.keyVer +
+                shPreimage.codeSeparator
         )
         assert(sigHash == shPreimage.sigHash, 'sigHash mismatch')
 
